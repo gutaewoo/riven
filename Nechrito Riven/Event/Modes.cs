@@ -203,12 +203,14 @@ namespace NechritoRiven.Event
 
         public static void FastHarass()
         {
-            var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
-            if (Spells.Q.IsReady())
+            if (Spells.Q.IsReady() && Spells.E.IsReady())
             {
+                var target = TargetSelector.GetTarget(450 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
                 if (target.IsValidTarget() && !target.IsZombie)
                 {
-                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                    if (!Orbwalking.InAutoAttackRange(target) && !InWRange(target)) Spells.E.Cast(target.Position);
+                    Utility.DelayAction.Add(10, ForceItem);
+                    Utility.DelayAction.Add(170, () => ForceCastQ(target));
                 }
             }
         }
