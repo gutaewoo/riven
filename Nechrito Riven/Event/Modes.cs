@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System.Linq;
 using LeagueSharp;
@@ -12,7 +12,10 @@ namespace NechritoRiven.Event
 {
     internal class Modes : Core.Core
     {
-
+        // Laneclear
+        public static void OnDoCastLc(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+        }
 
         // Jungle, Combo etc.
         public static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
