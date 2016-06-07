@@ -46,8 +46,6 @@ namespace NechritoRiven.Core
             if (forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0) Items.UseItem(Item);
             if (forceR2 && Spells.R.Instance.Name == IsSecondR)
             {
-                var target = TargetSelector.GetSelectedTarget();
-                if (target != null) Spells.R.Cast(target.Position);
             }
         }
         public static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
