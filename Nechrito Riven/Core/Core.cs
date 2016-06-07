@@ -8,7 +8,7 @@ namespace NechritoRiven.Core
         public static AttackableUnit qTarget;
 
         public const string IsFirstR = "RivenFengShuiEngine";
-        public const string IsSecondR = "RivenIzunaBlade";
+        public const string IsSecondR = "RivenIzunaBlad";
 
         public static int Qstack = 1;
 
