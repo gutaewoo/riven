@@ -204,15 +204,7 @@ namespace NechritoRiven.Event
         public static void FastHarass()
         {
             var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
-            if (Spells.Q.IsReady() && Qstack == 1)
-            {
-                if (target.IsValidTarget() && !target.IsZombie)
-                {
-                    ForceCastQ(target);
-                    Utility.DelayAction.Add(1, ForceW);
-                }
-            }
-            if (Spells.Q.IsReady() && Qstack == 3)
+            if (Spells.Q.IsReady())
             {
                 if (target.IsValidTarget() && !target.IsZombie)
                 {
