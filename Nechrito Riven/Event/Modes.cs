@@ -203,14 +203,31 @@ namespace NechritoRiven.Event
 
         public static void FastHarass()
         {
-            if (Spells.Q.IsReady() && Spells.E.IsReady())
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
+                Target != null) ForceR();
+
+            if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
+
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
+                Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
             {
-                var target = TargetSelector.GetTarget(450 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
-                if (target.IsValidTarget() && !target.IsZombie)
+                if (!InWRange(Target))
                 {
-                    if (!Orbwalking.InAutoAttackRange(target) && !InWRange(target)) Spells.E.Cast(target.Position);
-                    Utility.DelayAction.Add(10, ForceItem);
-                    Utility.DelayAction.Add(170, () => ForceCastQ(target));
+                    Spells.E.Cast(Target.Position);
+                    ForceR();
+                    Utility.DelayAction.Add(200, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                }
+            }
+
+            else if (Spells.W.IsReady() && Spells.E.IsReady())
+            {
+                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                    if (InWRange(Target))
+                    Utility.DelayAction.Add(100, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
         }
