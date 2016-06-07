@@ -102,6 +102,25 @@ namespace NechritoRiven.Event
                 if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
                     Spells.R.Cast(target.Position);
             }
+            
+            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
+            {
+                if (HasTitan())
+                {
+                    CastTitan();
+                    return;
+                }
+                if (Spells.W.IsReady() && InWRange(target))
+                {
+                    Usables.CastHydra();
+                    Spells.W.Cast();
+                }
+                else if (Spells._q.IsReady())
+                {
+                    ForceItem();
+                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                }
+            }
 
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
               {
