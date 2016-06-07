@@ -203,32 +203,21 @@ namespace NechritoRiven.Event
 
         public static void FastHarass()
         {
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
-                Target != null) ForceR();
-
-            if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
-
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
-                Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
+            var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
+            if (Spells.Q.IsReady() && Spells.W.IsReady() && Spells.E.IsReady() && Qstack == 1)
             {
-                if (!InWRange(Target))
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
-                    Spells.E.Cast(Target.Position);
-                    ForceR();
-                    Utility.DelayAction.Add(200, ForceW);
-                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                    ForceCastQ(target);
+                    Utility.DelayAction.Add(1, ForceW);
                 }
             }
-
-            else if (Spells.W.IsReady() && Spells.E.IsReady())
+            if (Spells.Q.IsReady() && Spells.E.IsReady() && Qstack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
             {
-                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
-                {
-                    Spells.E.Cast(Target.Position);
-                    if (InWRange(Target))
-                    Utility.DelayAction.Add(100, ForceW);
-                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
-                }
+                var epos = Player.ServerPosition +
+                          (Player.ServerPosition - target.ServerPosition).Normalized() * 300;
+                Spells.E.Cast(epos);
+                Utility.DelayAction.Add(190, () => Spells.Q.Cast(epos));
             }
         }
 
