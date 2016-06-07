@@ -208,8 +208,7 @@ namespace NechritoRiven.Event
             {
                 if (target.IsValidTarget() && !target.IsZombie)
                 {
-                    ForceCastQ(target);
-                    Utility.DelayAction.Add(1, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
         }
