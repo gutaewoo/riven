@@ -30,9 +30,6 @@ namespace NechritoRiven.Event
                 case Orbwalking.OrbwalkingMode.Combo:
                     Modes.Combo();
                     break;
-                case Orbwalking.OrbwalkingMode.Burst:
-                    Modes.Burst();
-                    break;
                 case Orbwalking.OrbwalkingMode.Flee:
                     Modes.Flee();
                     break;
