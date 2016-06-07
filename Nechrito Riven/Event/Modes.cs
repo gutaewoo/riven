@@ -113,28 +113,6 @@ namespace NechritoRiven.Event
                     Utility.DelayAction.Add(1, () => ForceCastQ(target));
                 }
               }
-
-            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst)
-            {
-
-                if (Spells.E.IsReady() && (Player.Distance(target.Position) <= Spells.E.Range + Player.AttackRange))
-                    Spells.E.Cast(target);
-
-                if (Player.Distance(target.Position) <= Spells.W.Range)
-                {
-                    if (Spells.W.IsReady())
-                    {
-                        Spells.W.Cast(target);
-                    }
-                    if (Spells.Q.IsReady())
-                    {
-                        Utility.DelayAction.Add(30, () => ForceCastQ(Target));
-                        Usables.CastHydra();
-                    }
-                }
-                if (Spells.R.IsReady() && Qstack >= 2 && Spells.R.Instance.Name == IsSecondR)
-                    Spells.R.Cast(target.Position);
-            }
         }
 
         public static void QMove()
@@ -221,51 +199,20 @@ namespace NechritoRiven.Event
             }
         }
 
-        public static void Burst()
-        {
-            var target = TargetSelector.GetSelectedTarget();
 
-            if (target != null && target.IsValidTarget() && !target.IsZombie)
-            {
-                if(Spells.Flash.IsReady())
-                {
-                    if (target.Health < Dmg.Totaldame(target) || MenuConfig.AlwaysF)
-                    {
-                        if (Player.Distance(target.Position) <= 700 && Player.Distance(target.Position) >= 600)
-                        {
-                            if (Spells.R.IsReady() && Spells.E.IsReady() && Spells.W.IsReady() && Spells.R.Instance.Name == IsFirstR)
-                            {
-                                Spells.E.Cast(target.Position);
-                                Usables.CastYoumoo();
-                                ForceR();
-                                Utility.DelayAction.Add(180, FlashW);
-                                Usables.CastHydra();
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (Player.Distance(target) <= Spells.E.Range + Player.BoundingRadius)
-                    {
-                        if (Spells.E.IsReady() && Spells.R.IsReady())
-                        {
-                            Spells.E.Cast(Target.ServerPosition);
-                            ForceR();
-                        }
-                        else if (Spells.E.IsReady())
-                        {
-                            Spells.E.Cast(Target);
-                        }
-                    }
-                }
-            }
-        }
 
         public static void FastHarass()
         {
             var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
             if (Spells.Q.IsReady() && Qstack == 1)
+            {
+                if (target.IsValidTarget() && !target.IsZombie)
+                {
+                    ForceCastQ(target);
+                    Utility.DelayAction.Add(1, ForceW);
+                }
+            }
+            if (Spells.Q.IsReady() && Qstack == 3)
             {
                 if (target.IsValidTarget() && !target.IsZombie)
                 {
