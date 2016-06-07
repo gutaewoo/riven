@@ -42,7 +42,7 @@ namespace NechritoRiven.Core
                 Spells.Q.IsReady())
                 Spells.Q.Cast(qTarget.Position);
             if (forceW) Spells.W.Cast();
-            if (forceR && Spells.R.Instance.Name == IsFirstR) Spells.R.Cast();
+            if (forceR && Spells.R.Instance.Name == IsFirstR);
             if (forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0) Items.UseItem(Item);
             if (forceR2 && Spells.R.Instance.Name == IsSecondR)
             {
@@ -85,8 +85,6 @@ namespace NechritoRiven.Core
 
         public static void ForceR2()
         {
-            forceR2 = Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR;
-            Utility.DelayAction.Add(500, () => forceR2 = false);
         }
         public static void ForceCastQ(AttackableUnit target)
         {
