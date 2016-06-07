@@ -105,11 +105,6 @@ namespace NechritoRiven.Event
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
             {
-                if (HasTitan())
-                {
-                    CastTitan();
-                    return;
-                }
                 if (Spells.W.IsReady() && InWRange(target))
                 {
                     Usables.CastHydra();
