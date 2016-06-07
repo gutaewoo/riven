@@ -110,7 +110,7 @@ namespace NechritoRiven.Event
                     Usables.CastHydra();
                     Spells.W.Cast();
                 }
-                else if (Spells._q.IsReady())
+                else if (Spells.Q.IsReady())
                 {
                     ForceItem();
                     Utility.DelayAction.Add(1, () => ForceCastQ(target));
