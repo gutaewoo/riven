@@ -195,7 +195,7 @@ namespace NechritoRiven.Event
             {
                 if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
                 {
-
+                    Spells.E.Cast(Target.Position);
                 }
             }
         }
