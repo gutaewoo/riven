@@ -15,25 +15,6 @@ namespace NechritoRiven.Event
         // Laneclear
         public static void OnDoCastLc(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || !Orbwalking.IsAutoAttack(args.SData.Name)) return;
-            qTarget = (Obj_AI_Base) args.Target;
-            if (args.Target is Obj_AI_Minion)
-            {
-                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                {
-                    var minions = MinionManager.GetMinions(70 + 120 + Player.BoundingRadius);
-                    if (minions.Count < 1) return;
-
-                    if (!Spells.Q.IsReady() || !MenuConfig.LaneQ) return;
-
-                    foreach (var m in minions)
-                    {
-                        ForceCastQ(m);
-                        Usables.CastHydra();
-                    }
-                    
-                }
-            }
         }
 
         // Jungle, Combo etc.
@@ -55,6 +36,11 @@ namespace NechritoRiven.Event
                     if (Spells.E.IsReady() && MenuConfig.LaneE)
                         Spells.E.Cast(minions.ServerPosition);
 
+                    if (Spells.Q.IsReady() && MenuConfig.LaneQ)
+                    {
+                        Utility.DelayAction.Add(1, () => ForceCastQ(minions));
+                        Usables.CastHydra();
+                    }
 
                     if (Spells.W.IsReady() && MenuConfig.LaneW)
                     {
@@ -151,25 +137,28 @@ namespace NechritoRiven.Event
         {
             if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
 
-            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
+                MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (mobs?.Distance(Player.Position) <= Spells.E.Range + Player.AttackRange)
+            if (mobs == null)
+                return;
+
+            // JUNGLE
+            if (Spells.E.IsReady() && MenuConfig.jnglE)
             {
-                if (Spells.E.IsReady() && MenuConfig.jnglE)
-                {
-                    Spells.E.Cast(mobs);
-                    Usables.CastHydra();
-                }
-
-                if (Spells.Q.IsReady() && MenuConfig.jnglQ)
-                {
-                    Usables.CastHydra();
-                    Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
-                }
-
-                if (!Spells.W.IsReady() || !MenuConfig.jnglW) return;
+                Spells.E.Cast(mobs);
                 Usables.CastHydra();
-                Utility.DelayAction.Add(150, () => Spells.W.Cast(mobs));
+            }
+
+            if (Spells.Q.IsReady() && MenuConfig.jnglQ)
+            {
+                ForceItem();
+                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
+            }
+            if (Spells.W.IsReady() && MenuConfig.jnglW)
+            {
+                ForceItem();
+                Spells.W.Cast(mobs);
             }
         }
 
