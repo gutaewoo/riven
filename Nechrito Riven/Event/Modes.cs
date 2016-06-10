@@ -204,7 +204,7 @@ namespace NechritoRiven.Event
 
         public static void FastHarass()
         {
-            var target = TargetSelector.GetTarget(420, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(450, TargetSelector.DamageType.Physical);
             if (Spells.Q.IsReady() && Qstack == 1)
             {
                 if (target.IsValidTarget() && !target.IsZombie)
