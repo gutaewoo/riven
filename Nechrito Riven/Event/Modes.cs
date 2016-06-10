@@ -15,6 +15,25 @@ namespace NechritoRiven.Event
         // Laneclear
         public static void OnDoCastLc(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (!sender.IsMe || !Orbwalking.IsAutoAttack(args.SData.Name)) return;
+            qTarget = (Obj_AI_Base) args.Target;
+            if (args.Target is Obj_AI_Minion)
+            {
+                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                {
+                    var minions = MinionManager.GetMinions(70 + 120 + Player.BoundingRadius);
+                    if (minions.Count < 1) return;
+
+                    if (!Spells.Q.IsReady() || !MenuConfig.LaneQ) return;
+
+                    foreach (var m in minions)
+                    {
+                        ForceCastQ(m);
+                        Usables.CastHydra();
+                    }
+                    
+                }
+            }
         }
 
         // Jungle, Combo etc.
