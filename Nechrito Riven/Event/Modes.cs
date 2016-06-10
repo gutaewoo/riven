@@ -55,11 +55,6 @@ namespace NechritoRiven.Event
                     if (Spells.E.IsReady() && MenuConfig.LaneE)
                         Spells.E.Cast(minions.ServerPosition);
 
-                    if (Spells.Q.IsReady() && MenuConfig.LaneQ)
-                    {
-                        Utility.DelayAction.Add(1, () => ForceCastQ(minions));
-                        Usables.CastHydra();
-                    }
 
                     if (Spells.W.IsReady() && MenuConfig.LaneW)
                     {
