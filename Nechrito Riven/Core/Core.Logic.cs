@@ -10,14 +10,13 @@ namespace NechritoRiven.Core
 {
    internal partial class Core
     {
-        public static AttackableUnit QTarget;
-        public static bool forceQ;
-        public static bool forceW;
-        public static bool forceR;
-        public static bool forceR2;
-        public static bool forceItem;
-        public static float lastQ;
-        public static float lastR;
+         public static AttackableUnit QTarget;
+        private static bool forceQ;
+        private static bool forceW;
+        private static bool forceR;
+        private static bool forceR2;
+        private static bool forceItem;
+         public static float lastQ;
         
         private static int Item
             =>
