@@ -68,7 +68,7 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 ForceItem();
-                ForceCastQ(target)
+                ForceCastQ(target);
             }
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
