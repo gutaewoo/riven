@@ -50,7 +50,7 @@ namespace NechritoRiven.Event
         private static void Reset()
         {
             Game.SendEmote(Emote.Dance);
-            Orbwalking.LastAaTick = 0;
+            Orbwalking.LastAATick = 0;
             Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(Game.CursorPos, Player.Distance(Game.CursorPos) + 10));
         }
     }
