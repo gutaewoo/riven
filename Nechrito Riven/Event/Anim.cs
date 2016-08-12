@@ -19,7 +19,7 @@ namespace NechritoRiven.Event
             switch (args.Animation)
             {
                 case "Spell1a":
-                    LastQ = Utils.GameTimeTickCount;
+                    lastQ = Utils.GameTimeTickCount;
                     Qstack = 2;
 
                     if (SafeReset)
@@ -28,7 +28,7 @@ namespace NechritoRiven.Event
                     }
                     break;
                 case "Spell1b":
-                    LastQ = Utils.GameTimeTickCount;
+                    lastQ = Utils.GameTimeTickCount;
                     Qstack = 3;
 
                     if (SafeReset)
@@ -37,7 +37,7 @@ namespace NechritoRiven.Event
                     }
                     break;
                 case "Spell1c":
-                    LastQ = Utils.GameTimeTickCount;
+                    lastQ = Utils.GameTimeTickCount;
                     Qstack = 1;
 
                     if (SafeReset)
