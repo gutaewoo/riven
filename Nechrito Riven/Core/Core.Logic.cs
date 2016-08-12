@@ -16,7 +16,7 @@ namespace NechritoRiven.Core
         private static bool forceR;
         private static bool forceR2;
         private static bool forceItem;
-         public static float LastQ;
+         public static float lastQ;
         
         private static int Item
             =>
