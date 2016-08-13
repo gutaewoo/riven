@@ -143,7 +143,7 @@ namespace NechritoRiven.Event
             {
                 if (!m.IsValid) return;
 
-                if (Spells.E.IsReady() && MenuConfig.JnglE && !Player.IsWindingUp)
+                if (Spells.E.IsReady() && MenuConfig.jnglE && !Player.IsWindingUp)
                 {
                     Spells.E.Cast(m.Position);
                 }
