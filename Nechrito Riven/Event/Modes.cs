@@ -68,6 +68,15 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
+
+                if (Spells.Q.IsReady())
+                {
+                    ForceItem();
+                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                }
+
+                if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
+                    Spells.R.Cast(target.Position);
             }
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
@@ -115,6 +124,8 @@ namespace NechritoRiven.Event
 
         public static void Jungleclear()
         {
+            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
+            
             var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
 
             if (mobs == null) return;
@@ -122,11 +133,6 @@ namespace NechritoRiven.Event
             foreach (var m in mobs)
             {
                 if (!m.IsValid) return;
-
-                if (Spells.E.IsReady() && MenuConfig.jnglE && !Player.IsWindingUp)
-                {
-                    Spells.E.Cast(m.Position);
-                }
             }
         }
         
