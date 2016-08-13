@@ -161,6 +161,8 @@ namespace NechritoRiven.Event
                 Spells.W.Cast(mobs);
             }
         }
+        
+        public static void Laneclear()
 
         public static void Combo()
         {
