@@ -68,11 +68,6 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
-                if (Spells.E.IsReady())
-                {
-                    Spells.E.Cast(target.Position);
-                    Usables.CastHydra();
-                }
 
                 if (Spells.W.IsReady() && InWRange(target))
                 {
