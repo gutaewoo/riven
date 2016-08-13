@@ -1,8 +1,8 @@
-﻿using LeagueSharp.Common.Data;
+using LeagueSharp.Common.Data;
 
 namespace NechritoRiven.Core
 {
-    class Usables
+    class Usables : Core
     {
         public static void CastHydra()
         {
@@ -12,9 +12,8 @@ namespace NechritoRiven.Core
             if (ItemData.Titanic_Hydra_Melee_Only.GetItem().IsReady())
                 ItemData.Titanic_Hydra_Melee_Only.GetItem().Cast();
 
-            else if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
+            if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
                 ItemData.Tiamat_Melee_Only.GetItem().Cast();
-            Orbwalking.LastAATick = 0;
         }
         public static void CastYoumoo()
         {
