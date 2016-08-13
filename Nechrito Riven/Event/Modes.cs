@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -12,108 +13,101 @@ namespace NechritoRiven.Event
 {
     internal class Modes : Core.Core
     {
-        // Laneclear
-        public static void OnDoCastLc(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-        }
-
         // Jungle, Combo etc.
         public static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            var spellName = args.SData.Name;
-            if (!sender.IsMe || !Orbwalking.IsAutoAttack(spellName)) return;
-            qTarget = (Obj_AI_Base)args.Target;
+            if (!sender.IsMe) return;
 
-            if (args.Target is Obj_AI_Minion)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                Jungleclear();
-                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                if (args.Target is Obj_AI_Minion)
                 {
-                    var minions = MinionManager.GetMinions(600f).FirstOrDefault();
+                    var minions = MinionManager.GetMinions(Player.AttackRange + 380);
+
                     if (minions == null)
+                    {
                         return;
-
-                    if (Spells.E.IsReady() && MenuConfig.LaneE)
-                        Spells.E.Cast(minions.ServerPosition);
-
-                    if (Spells.Q.IsReady() && MenuConfig.LaneQ)
-                    {
-                        Utility.DelayAction.Add(1, () => ForceCastQ(minions));
-                        Usables.CastHydra();
                     }
 
-                    if (Spells.W.IsReady() && MenuConfig.LaneW)
+                    foreach (var m in minions)
                     {
-                        var minion = MinionManager.GetMinions(Player.Position, Spells.W.Range);
-                        foreach (var m in minion)
-                        {
-                            if (m.Health < Spells.W.GetDamage(m) && minion.Count > 2)
-                                Utility.DelayAction.Add(70, () => Spells.W.Cast(m));
-                        }
+                        if (!Spells.Q.IsReady() || !MenuConfig.LaneQ || m.UnderTurret()) continue;
+
+                        ForceItem();
+                        ForceCastQ(m);
                     }
                 }
-                
+
+                var objAiTurret = args.Target as Obj_AI_Turret;
+                if (objAiTurret != null)
+                {
+                    if (objAiTurret.IsValid && Spells.Q.IsReady() && MenuConfig.LaneQ)
+                    {
+                        ForceCastQ(objAiTurret);
+                    }
+                }
+
+                var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
+
+                if (mobs == null) return;
+
+                foreach (var m in mobs)
+                {
+                    if (!m.IsValid) return;
+
+                    if (Spells.Q.IsReady() && MenuConfig.JnglQ)
+                    {
+                        ForceItem();
+                        ForceCastQ(m);
+                    }
+
+                    else if (!Spells.W.IsReady() || !MenuConfig.JnglW) return;
+
+                    ForceItem();
+                    Spells.W.Cast(m);
+                }
             }
 
-            var @base = args.Target as Obj_AI_Turret;
-            if (@base != null)
+            if(!Spells.Q.IsReady()) return;
 
-                if (@base.IsValid && args.Target != null && Spells.Q.IsReady() && MenuConfig.LaneQ &&
-                    _orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) ForceCastQ(@base);
+            var a = HeroManager.Enemies.Where(x => x.IsValidTarget(Player.AttackRange + 360));
 
-            var hero = args.Target as Obj_AI_Hero;
-            if (hero == null) return;
-            var target = hero;
+            var targets = a as Obj_AI_Hero[] ?? a.ToArray();
 
-            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            foreach (var target in targets)
             {
-
-                if (Spells.E.IsReady())
-                {
-                    Spells.E.Cast(target.Position);
-                    Usables.CastHydra();
-                }
-
-                if (Spells.W.IsReady() && InWRange(target))
-                {
-                    Usables.CastHydra();
-                    Spells.W.Cast();
-                }
-
-                if (Spells.Q.IsReady())
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     ForceItem();
-                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                    ForceCastQ(target);
                 }
 
-                if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
+                    if (Qstack == 2)
+                    {
+                        ForceItem();
+                        Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                    }
+                }
+
+                if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst) return;
+
+                if (!InWRange(target)) return;
+
+                if (Spells.W.IsReady())
+                {
+                    Spells.W.Cast(target);
+                }
+
+                ForceItem();
+                ForceCastQ(target);
+
+                if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
+                {
                     Spells.R.Cast(target.Position);
-            }
-            
-            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
-            {
-                if (Spells.W.IsReady() && InWRange(target))
-                {
-                    Usables.CastHydra();
-                    Spells.W.Cast();
-                }
-                else if (Spells.Q.IsReady())
-                {
-                    ForceItem();
-                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
                 }
             }
-
-            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-              {
-
-                if (Qstack == 2 && Spells.Q.IsReady())
-                {
-                    Usables.CastHydra();
-                    ForceItem();
-                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
-                }
-              }
         }
 
         public static void QMove()
