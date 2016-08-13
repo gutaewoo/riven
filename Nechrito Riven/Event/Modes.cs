@@ -124,30 +124,18 @@ namespace NechritoRiven.Event
 
         public static void Jungleclear()
         {
-            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
+            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
 
-            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
-                MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (mobs == null) return;
 
-            if (mobs == null)
-                return;
-
-            // JUNGLE
-            if (Spells.E.IsReady() && MenuConfig.jnglE)
+            foreach (var m in mobs)
             {
-                Spells.E.Cast(mobs);
-                Usables.CastHydra();
-            }
+                if (!m.IsValid) return;
 
-            if (Spells.Q.IsReady() && MenuConfig.jnglQ)
-            {
-                ForceItem();
-                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
-            }
-            if (Spells.W.IsReady() && MenuConfig.jnglW)
-            {
-                ForceItem();
-                Spells.W.Cast(mobs);
+                if (Spells.E.IsReady() && MenuConfig.jnglE && !Player.IsWindingUp)
+                {
+                    Spells.E.Cast(m.Position);
+                }
             }
         }
         
