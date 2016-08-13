@@ -174,7 +174,6 @@ namespace NechritoRiven.Event
             {
                 if (!InWRange(Target))
                 {
-                    Spells.E.Cast(Target.Position);
                     ForceR();
                     Utility.DelayAction.Add(200, ForceW);
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
