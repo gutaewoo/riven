@@ -181,26 +181,7 @@ namespace NechritoRiven.Event
 
             if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
                 Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
-            {
-                if (!InWRange(Target))
-                {
-                    Spells.E.Cast(Target.Position);
-                    ForceR();
-                    Utility.DelayAction.Add(200, ForceW);
-                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
-                }
-            }
 
-            else if (Spells.W.IsReady() && Spells.E.IsReady())
-            {
-                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
-                {
-                    Spells.E.Cast(Target.Position);
-                    if (InWRange(Target))
-                    Utility.DelayAction.Add(100, ForceW);
-                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
-                }
-            }
             if (Spells.E.IsReady() && !InWRange(target))
             {
                 Spells.E.Cast(target.Position);
