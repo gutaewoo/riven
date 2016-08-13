@@ -191,13 +191,6 @@ namespace NechritoRiven.Event
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
-            else if (Spells.E.IsReady())
-            {
-                if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
-                {
-                    Spells.E.Cast(Target.Position);
-                }
-            }
         }
 
 
