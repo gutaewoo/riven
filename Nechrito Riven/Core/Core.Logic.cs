@@ -35,17 +35,34 @@ namespace NechritoRiven.Core
             forceQ = true;
             QTarget = target;
         }
+
         public static void ForceSkill()
         {
             if (forceQ && qTarget != null && qTarget.IsValidTarget(Spells.E.Range + Player.BoundingRadius + 70) &&
                 Spells.Q.IsReady())
-                Spells.Q.Cast(qTarget.Position);
-            if (forceW) Spells.W.Cast();
-            if (forceR && Spells.R.Instance.Name == IsFirstR);
-            if (forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0) Items.UseItem(Item);
-            if (forceR2 && Spells.R.Instance.Name == IsSecondR)
             {
+                Spells.Q.Cast(qTarget.Position);
             }
+
+            if (forceW)
+            {
+                Spells.W.Cast();
+            }
+
+            if (forceR && Spells.R.Instance.Name == IsFirstR)
+            {
+                Spells.R.Cast();
+            }
+
+            if (forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0)
+            {
+                Items.UseItem(Item);
+            }
+
+            if (forceR2 || Spells.R.Instance.Name != IsSecondR) return;
+
+            var target = TargetSelector.GetSelectedTarget();
+            if (target != null) Spells.R.Cast(target.Position);
         }
         public static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -94,10 +111,11 @@ namespace NechritoRiven.Core
         public static void FlashW()
         {
             var target = TargetSelector.GetSelectedTarget();
-            if (target != null && target.IsValidTarget() && !target.IsZombie)
-            {
-                Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
-            }
+            
+            if (target == null || !target.IsValidTarget() || target.IsZombie) return;
+
+            Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
+            Utility.DelayAction.Add(11, ()=> Spells.W.Cast(target));
         }
     }
 }
