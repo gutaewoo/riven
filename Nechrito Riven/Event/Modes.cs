@@ -163,6 +163,9 @@ namespace NechritoRiven.Event
         }
         
         public static void Laneclear()
+        {
+            
+        }
 
         public static void Combo()
         {
