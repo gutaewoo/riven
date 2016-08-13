@@ -121,7 +121,7 @@ namespace NechritoRiven
         /// <summary>
         /// The last auto attack tick
         /// </summary>
-        public static int LastAaTick;
+        public static int LastAATick;
 
         /// <summary>
         /// <c>true</c> if the orbwalker will attack.
@@ -363,7 +363,7 @@ namespace NechritoRiven
         public static bool CanAttack()
         {
 
-            return Utils.GameTimeTickCount >= LastAaTick + Player.AttackDelay * 1000 && Attack;
+            return Utils.GameTimeTickCount >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace NechritoRiven
                 return true;
             }
 
-            return (Utils.GameTimeTickCount >= LastAaTick + Player.AttackCastDelay * 1000 + extraWindup);
+            return (Utils.GameTimeTickCount >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
         }
 
         /// <summary>
@@ -544,7 +544,7 @@ namespace NechritoRiven
         /// </summary>
         public static void ResetAutoAttackTimer()
         {
-            LastAaTick = 0;
+            LastAATick = 0;
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace NechritoRiven
                 if (unit.IsMe &&
                     (spell.Target is Obj_AI_Base || spell.Target is Obj_BarracksDampener || spell.Target is Obj_HQ))
                 {
-                    LastAaTick = Utils.GameTimeTickCount - Game.Ping / 2;
+                    LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
                     _missileLaunched = false;
                     LastMoveCommandT = 0;
 
