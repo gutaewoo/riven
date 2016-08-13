@@ -177,10 +177,6 @@ namespace NechritoRiven.Event
         {
              var target = TargetSelector.GetTarget(Player.AttackRange + 310, TargetSelector.DamageType.Physical);
 
-            if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
-
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
-                Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
 
             if (Spells.E.IsReady() && !InWRange(target))
             {
