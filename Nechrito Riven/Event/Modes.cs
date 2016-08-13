@@ -164,9 +164,27 @@ namespace NechritoRiven.Event
         
         public static void Laneclear()
         {
-            
-        }
+            var minions = MinionManager.GetMinions(Player.AttackRange + 380);
 
+            if (minions == null)
+            {
+                return;
+            }
+
+            foreach (var m in minions)
+            {
+                if (m.UnderTurret()) continue;
+
+                if (Spells.E.IsReady() && MenuConfig.LaneE)
+                {
+                    Spells.E.Cast(m);
+                }
+
+                if(!Spells.W.IsReady() || !MenuConfig.LaneW || !InWRange(m) || Player.IsWindingUp || m.Health > Spells.W.GetDamage(m)) continue;
+
+                Spells.W.Cast(m);
+            }
+        }
         public static void Combo()
         {
             if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
