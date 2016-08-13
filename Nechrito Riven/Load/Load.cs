@@ -18,7 +18,6 @@ namespace NechritoRiven.Load
             MenuConfig.LoadMenu();
             Spells.Load();
 
-            Obj_AI_Base.OnDoCast += Modes.OnDoCastLc;
             Obj_AI_Base.OnDoCast += Modes.OnDoCast;
             Obj_AI_Base.OnProcessSpellCast += Core.Core.OnCast;
             Obj_AI_Base.OnPlayAnimation += Anim.OnPlay;
