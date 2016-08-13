@@ -18,7 +18,7 @@ namespace NechritoRiven.Event
         {
             if (!sender.IsMe) return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 if (args.Target is Obj_AI_Minion)
                 {
@@ -55,13 +55,13 @@ namespace NechritoRiven.Event
                 {
                     if (!m.IsValid) return;
 
-                    if (Spells.Q.IsReady() && MenuConfig.JnglQ)
+                    if (Spells.Q.IsReady() && MenuConfig.jnglQ)
                     {
                         ForceItem();
                         ForceCastQ(m);
                     }
 
-                    else if (!Spells.W.IsReady() || !MenuConfig.JnglW) return;
+                    else if (!Spells.W.IsReady() || !MenuConfig.jnglW) return;
 
                     ForceItem();
                     Spells.W.Cast(m);
@@ -76,13 +76,13 @@ namespace NechritoRiven.Event
 
             foreach (var target in targets)
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     ForceItem();
                     ForceCastQ(target);
                 }
 
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
                     if (Qstack == 2)
                     {
@@ -91,7 +91,6 @@ namespace NechritoRiven.Event
                     }
                 }
 
-                if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst) return;
 
                 if (!InWRange(target)) return;
 
