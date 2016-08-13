@@ -68,26 +68,6 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
-                if (Spells.E.IsReady())
-                {
-                    Spells.E.Cast(target.Position);
-                    Usables.CastHydra();
-                }
-
-                if (Spells.W.IsReady() && InWRange(target))
-                {
-                    Usables.CastHydra();
-                    Spells.W.Cast();
-                }
-
-                if (Spells.Q.IsReady())
-                {
-                    ForceItem();
-                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
-                }
-
-                if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
-                    Spells.R.Cast(target.Position);
             }
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
