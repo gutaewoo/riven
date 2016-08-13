@@ -14,6 +14,5 @@ namespace NechritoRiven.Core
 
         public static Orbwalking.Orbwalker _orbwalker;
         public static Obj_AI_Hero Player => ObjectManager.Player;
-        public static Obj_AI_Hero Target => TargetSelector.GetTarget(250 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
     }
 }
