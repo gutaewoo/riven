@@ -68,6 +68,15 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
+
+                if (Spells.Q.IsReady())
+                {
+                    ForceItem();
+                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                }
+
+                if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
+                    Spells.R.Cast(target.Position);
             }
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
@@ -115,18 +124,30 @@ namespace NechritoRiven.Event
 
         public static void Jungleclear()
         {
-            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
+            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
 
-            if (mobs == null) return;
+            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
+                MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            foreach (var m in mobs)
+            if (mobs == null)
+                return;
+
+            // JUNGLE
+            if (Spells.E.IsReady() && MenuConfig.jnglE)
             {
-                if (!m.IsValid) return;
+                Spells.E.Cast(mobs);
+                Usables.CastHydra();
+            }
 
-                if (Spells.E.IsReady() && MenuConfig.jnglE && !Player.IsWindingUp)
-                {
-                    Spells.E.Cast(m.Position);
-                }
+            if (Spells.Q.IsReady() && MenuConfig.jnglQ)
+            {
+                ForceItem();
+                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
+            }
+            if (Spells.W.IsReady() && MenuConfig.jnglW)
+            {
+                ForceItem();
+                Spells.W.Cast(mobs);
             }
         }
         
