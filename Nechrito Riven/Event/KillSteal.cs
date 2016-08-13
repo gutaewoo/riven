@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using LeagueSharp;
 using LeagueSharp.Common;
 using NechritoRiven.Core;
 using NechritoRiven.Menus;
@@ -15,34 +14,32 @@ namespace NechritoRiven.Event
     {
         public static void Update(EventArgs args)
         {
-            var hero = TargetSelector.GetTarget(Spells.R.Range, TargetSelector.DamageType.Physical);
-
-            if (hero == null || hero.HasBuff("kindrednodeathbuff") || hero.HasBuff("Undying Rage") ||
-               hero.HasBuff("JudicatorIntervention")) return;
-
-            if (Spells.W.IsReady() && InWRange(hero))
+            if (Spells.W.IsReady())
             {
-                if (hero.Health <= Spells.W.GetDamage(hero))
+                var T = HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.R.Range) && !x.IsZombie);
+                foreach (var target in T)
                 {
-                    Spells.W.Cast();
+                    if (target.Health < Spells.W.GetDamage(target) && InWRange(target))
+                        Spells.W.Cast();
                 }
             }
-
             if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
             {
-                if (hero.Health < Dmg.RDmg(hero))
+                var T = HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.R.Range) && !x.IsZombie);
+                foreach (var target in T)
                 {
-                    var pred = Spells.R.GetPrediction(hero);
-
-                    Spells.R.Cast(pred.CastPosition);
+                    if (target.Health < Dmg.Rdame(target, target.Health) && !target.HasBuff("kindrednodeathbuff") &&
+                        !target.HasBuff("Undying Rage") && !target.HasBuff("JudicatorIntervention"))
+                        Spells.R.Cast(target.Position);
                 }
             }
-
-            if (!Spells.Ignite.IsReady() || !MenuConfig.Ignite) return;
-
-            if (hero.IsValidTarget(600f) && Dmg.IgniteDamage(hero) >= hero.Health)
+            if (Spells.Ignite.IsReady() && MenuConfig.ignite)
             {
-                Player.Spellbook.CastSpell(Spells.Ignite, hero);
+                var target = TargetSelector.GetTarget(600f, TargetSelector.DamageType.True);
+                if (target.IsValidTarget(600f) && Dmg.IgniteDamage(target) >= target.Health)
+                {
+                    Player.Spellbook.CastSpell(Spells.Ignite, target);
+                }
             }
         }
     }
