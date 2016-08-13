@@ -135,30 +135,18 @@ namespace NechritoRiven.Event
 
         public static void Jungleclear()
         {
-            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
+            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
 
-            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
-                MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (mobs == null) return;
 
-            if (mobs == null)
-                return;
-
-            // JUNGLE
-            if (Spells.E.IsReady() && MenuConfig.jnglE)
+            foreach (var m in mobs)
             {
-                Spells.E.Cast(mobs);
-                Usables.CastHydra();
-            }
+                if (!m.IsValid) return;
 
-            if (Spells.Q.IsReady() && MenuConfig.jnglQ)
-            {
-                ForceItem();
-                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
-            }
-            if (Spells.W.IsReady() && MenuConfig.jnglW)
-            {
-                ForceItem();
-                Spells.W.Cast(mobs);
+                if (Spells.E.IsReady() && MenuConfig.JnglE && !Player.IsWindingUp)
+                {
+                    Spells.E.Cast(m.Position);
+                }
             }
         }
         
@@ -187,8 +175,7 @@ namespace NechritoRiven.Event
         }
         public static void Combo()
         {
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
-                Target != null) ForceR();
+             var target = TargetSelector.GetTarget(Player.AttackRange + 310, TargetSelector.DamageType.Physical);
 
             if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
 
@@ -214,12 +201,9 @@ namespace NechritoRiven.Event
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
-            else if (Spells.E.IsReady())
+            if (Spells.E.IsReady() && !InWRange(target))
             {
-                if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
-                {
-                    Spells.E.Cast(Target.Position);
-                }
+                Spells.E.Cast(target.Position);
             }
         }
 
