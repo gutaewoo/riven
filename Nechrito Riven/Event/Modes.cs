@@ -175,12 +175,39 @@ namespace NechritoRiven.Event
         }
         public static void Combo()
         {
-             var target = TargetSelector.GetTarget(Player.AttackRange + 310, TargetSelector.DamageType.Physical);
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
+                Target != null) ForceR();
 
+            if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
 
-            if (Spells.E.IsReady() && !InWRange(target))
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
+                Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
             {
-                Spells.E.Cast(target.Position);
+                if (!InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                    ForceR();
+                    Utility.DelayAction.Add(200, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                }
+            }
+
+            else if (Spells.W.IsReady() && Spells.E.IsReady())
+            {
+                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                    if (InWRange(Target))
+                    Utility.DelayAction.Add(100, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                }
+            }
+            else if (Spells.E.IsReady())
+            {
+                if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                }
             }
         }
 
