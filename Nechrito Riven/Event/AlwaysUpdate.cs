@@ -36,6 +36,10 @@ namespace NechritoRiven.Event
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Modes.Harass();
                     break;
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    Modes.Jungleclear();
+                    Modes.Laneclear();
+                    break;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     break;
                 case Orbwalking.OrbwalkingMode.CustomMode:
