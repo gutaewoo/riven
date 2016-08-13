@@ -67,8 +67,12 @@ namespace NechritoRiven.Event
 
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-
-
+                if (Spells.E.IsReady())
+                {
+                    Spells.E.Cast(target.Position);
+                    Usables.CastHydra();
+                }
+                
                 if (Spells.W.IsReady() && InWRange(target))
                 {
                     Usables.CastHydra();
@@ -179,7 +183,6 @@ namespace NechritoRiven.Event
             {
                 if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
                 {
-                    Spells.E.Cast(Target.Position);
                     if (InWRange(Target))
                     Utility.DelayAction.Add(100, ForceW);
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
