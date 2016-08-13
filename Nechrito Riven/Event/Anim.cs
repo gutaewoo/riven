@@ -9,7 +9,6 @@ namespace NechritoRiven.Event
         private static int ExtraDelay => Game.Ping/2;
 
         private static bool SafeReset =>
-                _orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Flee &&
                 _orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None;
 
         public static void OnPlay(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
