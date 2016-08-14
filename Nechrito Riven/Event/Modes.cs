@@ -127,7 +127,7 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
 
             var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
-                MinionTeam.Neutral);
+                MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
             if (mobs == null)
                 return;
@@ -142,7 +142,7 @@ namespace NechritoRiven.Event
             if (Spells.Q.IsReady() && MenuConfig.jnglQ)
             {
                 ForceItem();
-                ForceCastQ(mobs);
+                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
             }
             if (Spells.W.IsReady() && MenuConfig.jnglW)
             {
