@@ -135,7 +135,7 @@ namespace NechritoRiven.Event
             if (Spells.Q.IsReady() && MenuConfig.jnglQ)
             {
                 ForceItem();
-                Utility.DelayAction.Add(1, () => ForceCastQ(m));
+                ForceCastQ(m);
             }
         }
         
