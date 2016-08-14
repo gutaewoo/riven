@@ -132,11 +132,6 @@ namespace NechritoRiven.Event
             foreach (var m in mobs)
             {
                 if (!m.IsValid) return;
-
-                if (Spells.E.IsReady() && MenuConfig.JnglE && !Player.IsWindingUp)
-                {
-                    Spells.E.Cast(m.Position);
-                }
             }
         }
         
