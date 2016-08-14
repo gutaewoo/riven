@@ -16,7 +16,7 @@ namespace NechritoRiven.Event
         {
             if (!sender.IsMe) return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 if (args.Target is Obj_AI_Minion)
                 {
