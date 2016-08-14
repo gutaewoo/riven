@@ -135,7 +135,7 @@ namespace NechritoRiven.Event
             if (Spells.Q.IsReady() && MenuConfig.jnglQ)
             {
                 ForceItem();
-                ForceCastQ(m);
+                ForceCastQ(mobs);
             }
         }
         
