@@ -12,47 +12,58 @@ namespace NechritoRiven.Event
 {
     internal class Modes : Core.Core
     {
-        // Laneclear
-        public static void OnDoCastLc(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+         public static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-        }
+            if (!sender.IsMe) return;
 
-        // Jungle, Combo etc.
-        public static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            var spellName = args.SData.Name;
-            if (!sender.IsMe || !Orbwalking.IsAutoAttack(spellName)) return;
-            qTarget = (Obj_AI_Base)args.Target;
-
-            if (args.Target is Obj_AI_Minion)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                Jungleclear();
-                if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                if (args.Target is Obj_AI_Minion)
                 {
-                    var minions = MinionManager.GetMinions(600f).FirstOrDefault();
+                    var minions = MinionManager.GetMinions(Player.AttackRange + 380);
+
                     if (minions == null)
-                        return;
-
-                    if (Spells.E.IsReady() && MenuConfig.LaneE)
-                        Spells.E.Cast(minions.ServerPosition);
-
-                    if (Spells.Q.IsReady() && MenuConfig.LaneQ)
                     {
-                        Utility.DelayAction.Add(1, () => ForceCastQ(minions));
-                        Usables.CastHydra();
+                        return;
                     }
 
-                    if (Spells.W.IsReady() && MenuConfig.LaneW)
+                    foreach (var m in minions)
                     {
-                        var minion = MinionManager.GetMinions(Player.Position, Spells.W.Range);
-                        foreach (var m in minion)
-                        {
-                            if (m.Health < Spells.W.GetDamage(m) && minion.Count > 2)
-                                Utility.DelayAction.Add(70, () => Spells.W.Cast(m));
-                        }
+                        if (!Spells.Q.IsReady() || !MenuConfig.LaneQ || m.UnderTurret()) continue;
+
+                        ForceItem();
+                        ForceCastQ(m);
                     }
                 }
-                
+
+                var objAiTurret = args.Target as Obj_AI_Turret;
+                if (objAiTurret != null)
+                {
+                    if (objAiTurret.IsValid && Spells.Q.IsReady() && MenuConfig.LaneQ)
+                    {
+                        ForceCastQ(objAiTurret);
+                    }
+                }
+
+                var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
+
+                if (mobs == null) return;
+
+                foreach (var m in mobs)
+                {
+                    if (!m.IsValid) return;
+
+                    if (Spells.Q.IsReady() && MenuConfig.JnglQ)
+                    {
+                        ForceItem();
+                        ForceCastQ(m);
+                    }
+
+                    else if (!Spells.W.IsReady() || !MenuConfig.JnglW) return;
+
+                    ForceItem();
+                    Spells.W.Cast(m);
+                }
             }
 
             var @base = args.Target as Obj_AI_Turret;
