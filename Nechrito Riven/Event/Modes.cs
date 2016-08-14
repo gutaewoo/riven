@@ -53,13 +53,13 @@ namespace NechritoRiven.Event
                 {
                     if (!m.IsValid) return;
 
-                    if (Spells.Q.IsReady() && MenuConfig.JnglQ)
+                    if (Spells.Q.IsReady() && MenuConfig.jnglQ)
                     {
                         ForceItem();
                         ForceCastQ(m);
                     }
 
-                    else if (!Spells.W.IsReady() || !MenuConfig.JnglW) return;
+                    else if (!Spells.W.IsReady() || !MenuConfig.jnglW) return;
 
                     ForceItem();
                     Spells.W.Cast(m);
