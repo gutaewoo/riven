@@ -124,15 +124,13 @@ namespace NechritoRiven.Event
 
         public static void Jungleclear()
         {
+            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
+
             var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
                 MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (mobs == null) return;
-
-            foreach (var m in mobs)
-            {
-                if (!m.IsValid) return;
-            }
+            if (mobs == null)
+                return;
         }
         
         public static void Laneclear()
