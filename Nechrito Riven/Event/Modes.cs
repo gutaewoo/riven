@@ -126,16 +126,28 @@ namespace NechritoRiven.Event
         {
             if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear) return;
 
-            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All, MinionTeam.Neutral);
+            var mobs = MinionManager.GetMinions(Player.Position, 600f, MinionTypes.All,
+                MinionTeam.Neutral).FirstOrDefault();
 
             if (mobs == null)
                 return;
-                
-            
+
+            // JUNGLE
+            if (Spells.E.IsReady() && MenuConfig.jnglE)
+            {
+                Spells.E.Cast(mobs);
+                Usables.CastHydra();
+            }
+
             if (Spells.Q.IsReady() && MenuConfig.jnglQ)
             {
                 ForceItem();
-                ForceCastQ(mobs);
+                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
+            }
+            if (Spells.W.IsReady() && MenuConfig.jnglW)
+            {
+                ForceItem();
+                Spells.W.Cast(mobs);
             }
         }
         
