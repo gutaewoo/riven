@@ -142,7 +142,7 @@ namespace NechritoRiven.Event
             if (Spells.Q.IsReady() && MenuConfig.jnglQ)
             {
                 ForceItem();
-                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
+                ForceCastQ(mobs);
             }
             if (Spells.W.IsReady() && MenuConfig.jnglW)
             {
