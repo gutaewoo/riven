@@ -131,6 +131,13 @@ namespace NechritoRiven.Event
 
             if (mobs == null)
                 return;
+                
+            
+            if (Spells.Q.IsReady() && MenuConfig.jnglQ)
+            {
+                ForceItem();
+                Utility.DelayAction.Add(1, () => ForceCastQ(mobs));
+            }
         }
         
         public static void Laneclear()
