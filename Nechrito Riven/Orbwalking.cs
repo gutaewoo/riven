@@ -762,7 +762,7 @@ namespace NechritoRiven
 
                 /* Delay sliders */
                 _config.AddItem(
-                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(35)));
+                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(40)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0)));
 
                 /*Load the menu*/
