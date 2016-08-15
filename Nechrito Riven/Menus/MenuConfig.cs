@@ -39,6 +39,7 @@ namespace NechritoRiven.Menus
             combo.AddItem(new MenuItem("ignite", "Auto Ignite").SetValue(true)).SetTooltip("Auto Ignite When target is killable");
             combo.AddItem(new MenuItem("AlwaysR", "Force R").SetValue(new KeyBind('G', KeyBindType.Toggle))).SetTooltip("Off will only use R when target is killable");
             combo.AddItem(new MenuItem("AlwaysF", "Force Flash").SetValue(new KeyBind('L', KeyBindType.Toggle))).SetTooltip("Off Will only use Flash when target is killable");
+            combo.AddItem(new MenuItem("ComboE", "Use E").SetValue(true));
             Config.AddSubMenu(combo);
 
             var lane = new Menu("Lane", "Lane");
@@ -135,5 +136,6 @@ namespace NechritoRiven.Menus
         public static bool LaneE => Config.Item("LaneE").GetValue<bool>();
         public static bool Qstrange => Config.Item("Qstrange").GetValue<bool>();
         public static bool LaneQ => Config.Item("LaneQ").GetValue<bool>();
+        public static bool ComboE => Config.Item("ComboE").GetValue<bool>();
     }
 }
