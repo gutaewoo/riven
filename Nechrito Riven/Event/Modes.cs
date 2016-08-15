@@ -62,7 +62,6 @@ namespace NechritoRiven.Event
                     else if (!Spells.W.IsReady() || !MenuConfig.jnglW) return;
 
                     ForceItem();
-                    Spells.W.Cast(m);
                 }
             }
 
