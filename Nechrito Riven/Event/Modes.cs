@@ -192,7 +192,7 @@ namespace NechritoRiven.Event
                 }
             }
 
-            else if (Spells.W.IsReady() && Spells.E.IsReady())
+            else if (Spells.W.IsReady() && Spells.E.IsReady() && MenuConfig.ComboE)
             {
                 if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
                 {
