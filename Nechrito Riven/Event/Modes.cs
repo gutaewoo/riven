@@ -206,8 +206,7 @@ namespace NechritoRiven.Event
                 if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
                 {
                     if (InWRange(Target))
-                    Utility.DelayAction.Add(1, ForceW);
-                    ForceCastQ(target);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
             else if (Spells.E.IsReady() && MenuConfig.ComboE)
