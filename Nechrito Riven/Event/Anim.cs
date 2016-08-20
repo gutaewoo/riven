@@ -6,7 +6,7 @@ namespace NechritoRiven.Event
 {
     class Anim : Core.Core
     {
-        private static int ExtraDelay => Game.Ping/2;
+        private static int ExtraDelay => Game.SendEmote(Emote.Dance);
 
         private static bool SafeReset =>
                 _orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None;
