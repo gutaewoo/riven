@@ -201,6 +201,17 @@ namespace NechritoRiven.Event
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
+            else if (Spells.W.IsReady())
+            {
+                if (Spells.Q.IsReady() && Qstack == 1)
+                {
+                    if (target.IsValidTarget() && !target.IsZombie)
+                    {
+                        ForceCastQ(target);
+                        Utility.DelayAction.Add(1, ForceW);
+                    }
+                }
+            }
             else if (Spells.E.IsReady() && MenuConfig.ComboE)
             {
                 if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
