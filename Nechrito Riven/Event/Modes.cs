@@ -78,6 +78,15 @@ namespace NechritoRiven.Event
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
+
+                if (Spells.Q.IsReady())
+                {
+                    ForceItem();
+                    Utility.DelayAction.Add(1, () => ForceCastQ(target));
+                }
+
+                if (Spells.R.IsReady() && Qstack == 2 && Spells.R.Instance.Name == IsSecondR)
+                    Spells.R.Cast(target.Position);
             }
             
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
@@ -165,6 +174,52 @@ namespace NechritoRiven.Event
         }
         public static void Combo()
         {
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.AlwaysR &&
+                Target != null) ForceR();
+
+            if (Spells.W.IsReady() && InWRange(Target) && Target != null) Spells.W.Cast();
+
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && Spells.W.IsReady() && Target != null &&
+                Spells.E.IsReady() && Target.IsValidTarget() && !Target.IsZombie && (Dmg.IsKillableR(Target) || MenuConfig.AlwaysR))
+            {
+                if (!InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                    ForceR();
+                    Utility.DelayAction.Add(200, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                }
+            }
+
+            else if (Spells.W.IsReady() && Spells.E.IsReady() && MenuConfig.ComboE)
+            {
+                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                    if (InWRange(Target))
+                    Utility.DelayAction.Add(100, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
+                }
+            }
+            else if (Spells.W.IsReady() && && !MenuConfig.ComboE)
+            {
+                var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
+                if (Spells.Q.IsReady() && Qstack == 1)
+                {
+                    if (target.IsValidTarget() && !target.IsZombie)
+                    {
+                        ForceCastQ(target);
+                        Utility.DelayAction.Add(1, ForceW);
+                    }
+                }
+            }
+            else if (Spells.E.IsReady() && MenuConfig.ComboE)
+            {
+                if (Target != null && Target.IsValidTarget() && !Target.IsZombie && !InWRange(Target))
+                {
+                    Spells.E.Cast(Target.Position);
+                }
+            }
         }
 
 
