@@ -21,8 +21,8 @@ namespace NechritoRiven.Core
         private static int Item
             =>
                 Items.CanUseItem(3077) && Items.HasItem(3077)
-                    ? 3077
-                    : Items.CanUseItem(3074) && Items.HasItem(3074) ? 3074 : 0;
+                    ? 307
+                    : Items.CanUseItem(3074) && Items.HasItem(3074) ? 304 : 0;
 
         public static void ForceW()
         {
