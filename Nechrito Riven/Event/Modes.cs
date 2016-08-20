@@ -212,6 +212,13 @@ namespace NechritoRiven.Event
                         Utility.DelayAction.Add(1, ForceW);
                     }
                 }
+                if (Spells.Q.IsReady() && Qstack == 2)
+                {
+                    if (target.IsValidTarget() && !target.IsZombie)
+                    {
+                        ForceCastQ(target);
+                    }
+                }
             }
             else if (Spells.E.IsReady() && MenuConfig.ComboE)
             {
