@@ -201,7 +201,7 @@ namespace NechritoRiven.Event
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
-            else if (Spells.W.IsReady())
+            else if (Spells.W.IsReady() && && !MenuConfig.ComboE)
             {
                 var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
                 if (Spells.Q.IsReady() && Qstack == 1)
