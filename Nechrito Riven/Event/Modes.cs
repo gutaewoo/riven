@@ -203,13 +203,11 @@ namespace NechritoRiven.Event
             }
             else if (Spells.W.IsReady())
             {
-                if (Spells.Q.IsReady() && Qstack == 1)
+                if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
                 {
-                    if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
-                    {
-                        Utility.DelayAction.Add(30, () => ForceCastQ(Target));
-                        Utility.DelayAction.Add(100, ForceW);
-                    }
+                    if (InWRange(Target))
+                    Utility.DelayAction.Add(100, ForceW);
+                    Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
             else if (Spells.E.IsReady() && MenuConfig.ComboE)
