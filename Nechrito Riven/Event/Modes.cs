@@ -206,7 +206,7 @@ namespace NechritoRiven.Event
                 if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
                 {
                     if (InWRange(Target))
-                    Utility.DelayAction.Add(100, ForceW);
+                    Utility.DelayAction.Add(200, ForceW);
                     Utility.DelayAction.Add(30, () => ForceCastQ(Target));
                 }
             }
