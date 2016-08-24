@@ -203,7 +203,6 @@ namespace NechritoRiven.Event
             }
             else if (Spells.W.IsReady())
             {
-                var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
                 if (Spells.Q.IsReady() && Qstack == 1)
                 {
                     if (Target.IsValidTarget() && Target != null && !Target.IsZombie && !InWRange(Target))
